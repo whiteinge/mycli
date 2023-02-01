@@ -41,7 +41,7 @@ def mycli_bindings(mycli):
         if b.complete_state:
             b.complete_next()
         else:
-            b.start_completion(select_first=True)
+            b.start_completion(select_first=False)
 
     @kb.add('c-space')
     def _(event):
@@ -60,6 +60,30 @@ def mycli_bindings(mycli):
             b.complete_next()
         else:
             b.start_completion(select_first=False)
+
+    @kb.add('c-n', filter=vi_mode)
+    def _(event):
+        """
+        """
+        _logger.debug('Detected <C-n> key.')
+
+        b = event.app.current_buffer
+        if b.complete_state:
+            b.complete_next()
+        else:
+            b.history_forward(count=event.arg)
+
+    @kb.add('c-p', filter=vi_mode)
+    def _(event):
+        """
+        """
+        _logger.debug('Detected <C-p> key.')
+
+        b = event.app.current_buffer
+        if b.complete_state:
+            b.complete_previous()
+        else:
+            b.history_backward(count=event.arg)
 
     @kb.add('>', filter=vi_mode)
     @kb.add('c-x', 'p', filter=emacs_mode)
